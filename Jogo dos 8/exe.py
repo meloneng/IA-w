@@ -31,15 +31,33 @@ def findBlank(board):
                 return (i_idx,j_idx)
 
 
-
+# Verifica para qual direção o Blank pode ir e gera o estado
 def statesGen(board):
     blank = findBlank(board)
-    if(blank[0] == 0):
-        if(blank[1] == 0):
-        if(blank[1] == 2)
-    if(blank[0] == 2):
-        if(blank[1] == 0)
-        if(blank[1] == 2)
+    if((blank[0]+1) < 3):
+        aux = board[blank[0]+1][blank[1]]
+        board[blank[0]+1][blank[1]] = board[blank[0]][blank[1]]
+        board[blank[0]][blank[1]] = aux
+        states.put(board)
+        
+    if((blank[0]-1) > -1):
+        aux = board[blank[0]-1][blank[1]]
+        board[blank[0]-1][blank[1]] = board[blank[0]][blank[1]]
+        board[blank[0]][blank[1]] = aux
+        states.put(aux)
+        
+    if((blank[1]+1) < 3):
+        aux = board[blank[0]][blank[1]+1]
+        board[blank[0]][blank[1]+1] = board[blank[0]][blank[1]]
+        board[blank[0]][blank[1]] = aux
+        states.put(aux)
+        
+    if((blank[1]-1) > -1):
+        aux = board[blank[0]][blank[1]-1]
+        board[blank[0]][blank[1]-1] = board[blank[0]][blank[1]]
+        board[blank[0]][blank[1]] = aux
+        states.put(aux)
+        
     
 
 
@@ -47,4 +65,6 @@ def statesGen(board):
 estadoFinal = [[1, 2, 3], [4, 5, 6], [7, 8, -1]]
 board = boardInit()
 states = Queue()
+statesGen(board)
+
 
