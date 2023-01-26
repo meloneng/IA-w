@@ -1,10 +1,11 @@
 import random
+import copy
 from queue import Queue
 
 # Biblioteca para debug
 from icecream import ic
 ic.configureOutput(prefix='Debug| ')
-#ic.disable()
+ic.disable()
 
 # Inicializando o board
 def boardInit():
@@ -31,40 +32,112 @@ def findBlank(board):
                 return (i_idx,j_idx)
 
 
-# Verifica para qual direção o Blank pode ir e gera o estado
-def statesGen(board):
-    blank = findBlank(board)
+
+# Movimentações
+def movDown(originBoard, blank):
     if((blank[0]+1) < 3):
+        board = copy.deepcopy(originBoard)
         aux = board[blank[0]+1][blank[1]]
         board[blank[0]+1][blank[1]] = board[blank[0]][blank[1]]
         board[blank[0]][blank[1]] = aux
-        states.put(board)
-        
+        #ic(board)
+        if board in knowStates:
+            return False
+        elif(board == estadoFinal):
+            return True
+        else:
+            statesQueue.put(board)
+            knowStates.append(board)
+            return False
+
+def movUp(originBoard, blank):
     if((blank[0]-1) > -1):
+        board = copy.deepcopy(originBoard)
         aux = board[blank[0]-1][blank[1]]
         board[blank[0]-1][blank[1]] = board[blank[0]][blank[1]]
         board[blank[0]][blank[1]] = aux
-        states.put(aux)
-        
+        #ic(board)
+        if board in knowStates:
+            return False
+        elif(board == estadoFinal):
+            return True
+        else:
+            statesQueue.put(board)
+            knowStates.append(board)
+            return False
+
+def movRight(originBoard, blank):
     if((blank[1]+1) < 3):
+        board = copy.deepcopy(originBoard)
         aux = board[blank[0]][blank[1]+1]
         board[blank[0]][blank[1]+1] = board[blank[0]][blank[1]]
         board[blank[0]][blank[1]] = aux
-        states.put(aux)
-        
+        #ic(board)
+        if board in knowStates:
+            return False
+        elif(board == estadoFinal):
+            return True
+        else:
+            statesQueue.put(board)
+            knowStates.append(board)
+            return False
+
+def movLeft(originBoard, blank):
     if((blank[1]-1) > -1):
+        board = copy.deepcopy(originBoard)
         aux = board[blank[0]][blank[1]-1]
         board[blank[0]][blank[1]-1] = board[blank[0]][blank[1]]
         board[blank[0]][blank[1]] = aux
-        states.put(aux)
+        #ic(board)
+        if board in knowStates:
+            return False
+        elif(board == estadoFinal):
+            return True
+        else:
+            statesQueue.put(board)
+            knowStates.append(board)
+            return False
+
+
+
+# Verifica para qual direção o Blank pode ir e gera o estado
+def statesGen(originBoard):
+    blank = findBlank(originBoard)
+    
+    ic("new Gen", originBoard)
+    ic(len(knowStates))
+
+    b = movDown(originBoard, blank)
+    a = movUp(originBoard, blank)
+    c = movRight(originBoard, blank)
+    d = movLeft(originBoard, blank)
+
+    if(a or b or c or d):
+        return True
+
+    # Retorna falso após fazer os movimentos e não chegar ao estado final
+    return False
         
     
+def solWidth():
+    Initialboard = boardInit()
+    statesQueue.put(Initialboard)
+    knowStates.append(Initialboard)
+    aux=0
+    while(not(statesGen(statesQueue.get()))):
+        aux+=1
+        if(statesQueue.empty()):
+            print("Não achou estado final")
+            break
+    print("Número iterações: ", aux)
+
 
 
 
 estadoFinal = [[1, 2, 3], [4, 5, 6], [7, 8, -1]]
-board = boardInit()
-states = Queue()
-statesGen(board)
+#Initialboard = boardInit()
+statesQueue = Queue()
+knowStates = []
+solWidth()
 
 
