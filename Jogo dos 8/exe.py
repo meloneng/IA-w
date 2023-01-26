@@ -1,6 +1,6 @@
 import random
 import copy
-from queue import Queue
+from queue import Queue, LifoQueue
 
 # Biblioteca para debug
 from icecream import ic
@@ -46,7 +46,7 @@ def movDown(originBoard, blank):
         elif(board == estadoFinal):
             return True
         else:
-            statesQueue.put(board)
+            states.put(board)
             knowStates.append(board)
             return False
 
@@ -62,7 +62,7 @@ def movUp(originBoard, blank):
         elif(board == estadoFinal):
             return True
         else:
-            statesQueue.put(board)
+            states.put(board)
             knowStates.append(board)
             return False
 
@@ -78,7 +78,7 @@ def movRight(originBoard, blank):
         elif(board == estadoFinal):
             return True
         else:
-            statesQueue.put(board)
+            states.put(board)
             knowStates.append(board)
             return False
 
@@ -94,7 +94,7 @@ def movLeft(originBoard, blank):
         elif(board == estadoFinal):
             return True
         else:
-            statesQueue.put(board)
+            states.put(board)
             knowStates.append(board)
             return False
 
@@ -118,15 +118,30 @@ def statesGen(originBoard):
     # Retorna falso após fazer os movimentos e não chegar ao estado final
     return False
         
-    
+
+# Solução por BFS
 def solWidth():
     Initialboard = boardInit()
-    statesQueue.put(Initialboard)
+    states.put(Initialboard)
     knowStates.append(Initialboard)
     aux=0
-    while(not(statesGen(statesQueue.get()))):
+    while(not(statesGen(states.get()))):
         aux+=1
-        if(statesQueue.empty()):
+        if(states.empty()):
+            print("Não achou estado final")
+            break
+    print("Número iterações: ", aux)
+
+
+# Solução por DFS
+def solDepth():
+    Initialboard = boardInit()
+    states.put(Initialboard)
+    knowStates.append(Initialboard)
+    aux=0
+    while(not(statesGen(states.get()))):
+        aux+=1
+        if(states.empty()):
             print("Não achou estado final")
             break
     print("Número iterações: ", aux)
@@ -135,9 +150,9 @@ def solWidth():
 
 
 estadoFinal = [[1, 2, 3], [4, 5, 6], [7, 8, -1]]
-#Initialboard = boardInit()
-statesQueue = Queue()
 knowStates = []
-solWidth()
-
+#states = Queue()
+#solWidth()
+states = LifoQueue()
+solDepth()
 
