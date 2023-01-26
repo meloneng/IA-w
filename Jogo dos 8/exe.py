@@ -5,7 +5,7 @@ from queue import Queue, LifoQueue
 # Biblioteca para debug
 from icecream import ic
 ic.configureOutput(prefix='Debug| ')
-ic.disable()
+#ic.disable()
 
 # Inicializando o board
 def boardInit():
@@ -147,6 +147,8 @@ def solDepth():
     print("Número iterações: ", aux)
 
 
+def solAStar():
+    ic("mango")
 
 
 estadoFinal = [[1, 2, 3], [4, 5, 6], [7, 8, -1]]
